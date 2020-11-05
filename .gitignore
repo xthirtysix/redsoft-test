@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist
+.prettierrc.js
+.eslintrc.js
 
 
 # local env files

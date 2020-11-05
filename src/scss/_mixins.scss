@@ -1,0 +1,17 @@
+@import './variables.scss';
+
+@mixin list-reset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin paragraph-reset {
+  margin: 0;
+  text-align: left;
+}
+
+@mixin link-reset {
+  text-decoration: none;
+  color: $color-fg;
+}
