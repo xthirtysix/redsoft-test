@@ -3,12 +3,18 @@
     h1.page__header Картины эпоxи Возрождения
     ul.gallery
       li.gallery__item(v-for="(painting, idx) in paintings" :key="idx")
-        card(:data="painting")
+        card(
+          :data="painting"
+          :isInCart="!!~cart.indexOf(painting.name)"
+          @addToCart="addToCart"
+          @removeFromCart="removeFromCart"
+        )
 
 </template>
 
 <script>
 import Card from '@/components/Card';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'Gallery',
@@ -19,6 +25,21 @@ export default {
     paintings() {
       return this.$store.getters.paintings;
     },
+    cart() {
+      return this.$store.getters.cart;
+    },
+  },
+  beforeCreate() {
+    this.$store.commit('INITIALISE_STORE');
+  },
+  methods: {
+    ...mapActions(['ADD_TO_CART', 'REMOVE_FROM_CART']),
+    addToCart(item) {
+      this.ADD_TO_CART(item);
+    },
+    removeFromCart(item) {
+      this.REMOVE_FROM_CART(item);
+    },
   },
 };
 </script>
@@ -26,20 +47,36 @@ export default {
 <style lang="scss">
 @import '~@/scss/main.scss';
 
+.page {
+}
+
 .page__header {
-  text-align: left;
+  margin-bottom: 2.3rem;
 }
 
 .gallery {
   @include list-reset;
 
   display: flex;
-  width: 100%;
   flex-wrap: wrap;
   justify-content: space-between;
+
+  .gallery__item:nth-child(4n) {
+    margin-right: 0;
+  }
+
+  &::after {
+    content: '';
+    flex: auto;
+  }
 }
 
 .gallery__item {
-  max-width: 280px;
+  box-sizing: border-box;
+  display: flex;
+  min-height: 329px;
+  width: calc(1 / 4 * 100% - (1 - 1 / 4) * 2rem);
+  margin-right: 2rem;
+  margin-bottom: 2rem;
 }
 </style>
