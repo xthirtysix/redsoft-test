@@ -11,7 +11,56 @@
   text-align: left;
 }
 
+@mixin with-before {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    transition: 0.3s ease-in;
+  }
+}
+
+@mixin with-after {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    transition: 0.3s ease-in;
+  }
+}
+
 @mixin link-reset {
+  @include with-after;
+
   text-decoration: none;
   color: $color-fg;
+  transition: 0.2s ease-in;
+
+  &:hover::after {
+    left: 0.5rem;
+    right: 0.5rem;
+    height: 1px;
+    bottom: 0;
+    background-color: $color-accent;
+  }
+}
+
+@mixin button {
+  font-family: inherit;
+  color: $color-fg-inverted;
+  background-color: $color-btn;
+  border: none;
+  transition: 0.3s ease-in background-color;
+  cursor: pointer;
+  outline: none;
+
+  &:hover {
+    background-color: $color-hover;
+  }
+
+  &:disabled {
+    background-color: $color-disabled;
+  }
 }
