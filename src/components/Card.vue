@@ -15,7 +15,7 @@
           :class="{\
               'card__btn--wide': data.discount,\
               'card__btn--in-cart': isInCart,\
-              'card__btn--in-cart-wide': isInCart && !data.discount\
+              'card__btn--loading': data.loading,\
               }"
           @click="buttonHandler"
         ) {{isInCart ? 'В корзине' : 'Купить'}}
@@ -23,10 +23,13 @@
         p.card__sold-description(v-if="!data.inStock") Продано на аукционе
     p.card__image
       picture
-        source(:srcset=
+        source(type="image/webp" :srcset=
+        "`${require(`@/assets/img/${data.image}.webp`)} 1x, ${require(`@/assets/img/${data.image}@2x.webp`)} 2x`"
+        )
+        source(type="image/jpeg" :srcset=
         "`${require(`@/assets/img/${data.image}.jpg`)} 1x, ${require(`@/assets/img/${data.image}@2x.jpg`)} 2x`"
         )
-        img(:src="require(`@/assets/img/${data.image}.jpg`)" width="279" height="160" :alt="data.name")
+        img(:src="require(`@/assets/img/${data.image}.jpg`)" width="280" height="160" :alt="data.name")
 </template>
 
 <script>
@@ -40,6 +43,7 @@ export default {
       discount: { type: Number },
       currency: { type: String },
       inStock: { type: Boolean },
+      loading: { type: Boolean },
       image: { type: String },
     },
     isInCart: { type: Boolean },
@@ -55,8 +59,8 @@ export default {
   methods: {
     buttonHandler() {
       this.isInCart
-        ? this.$emit('removeFromCart', this.data.name)
-        : this.$emit('addToCart', this.data.name);
+        ? this.$emit('removeFromCart', this.data)
+        : this.$emit('addToCart', this.data);
     },
   },
 };
@@ -72,15 +76,6 @@ export default {
   flex: 1;
   border: 1px solid $color-border;
 
-  &__container {
-    width: 100%;
-  }
-
-  &__image {
-    order: -1;
-    width: 100%;
-  }
-
   &--out-of-stock {
     opacity: 0.5;
   }
@@ -89,16 +84,17 @@ export default {
 .card__container {
   box-sizing: border-box;
   display: flex;
+  width: 100%;
   flex-wrap: wrap;
   flex-grow: 1;
-  padding: 1.35rem 1.45rem 1.5rem 1.45rem;
+  padding: 1.2rem 1.45rem 1.51rem 1.45rem;
 }
 
 .card__header {
   @include paragraph-reset;
 
   width: 100%;
-  margin-bottom: 1.35rem;
+  margin-bottom: 1.15rem;
 }
 
 .card__price-wrapper {
@@ -110,6 +106,7 @@ export default {
 
 .card__price-container {
   width: 49%;
+  margin-top: -1px;
   align-items: center;
 }
 
@@ -144,49 +141,89 @@ export default {
 .card__btn {
   @include button;
 
+  position: relative;
   justify-self: flex-end;
+  min-width: 112px;
   margin-left: auto;
-  padding: 16px 28px 15px 28px;
-  letter-spacing: 0.5px;
+  padding: 14px 26px 13px 27px;
+  text-align: center;
+  letter-spacing: 0.6px;
 
   &--wide {
-    padding: 16px 31px 15px 31px;
+    min-width: 118px;
   }
 
   &--in-cart {
     @include with-before;
-    padding: 16px 9px 15px 32px;
+    padding-left: unset;
+    padding-right: 9px;
+    text-align: right;
     background-color: $color-accent;
 
     &::before {
       top: calc(50% - 6px);
-      left: 9px;
+      left: 5px;
       width: 16px;
       height: 12px;
       background-image: url("data:image/svg+xml,%3Csvg width='16' height='13' viewBox='0 0 16 13' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M14.5315 1.80937L5.63341 11.237L1.34814 7.19237' stroke='%23F4F6F9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
       background-size: 16px 12px;
       background-repeat: no-repeat;
     }
+
+    &.card__btn--wide {
+      &::before {
+        left: 9px;
+      }
+    }
   }
 
-  &--in-cart-wide {
-    padding-left: 26px;
+  &--loading::before {
+    content: '';
+    position: absolute;
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: $color-btn;
+  }
+  &--loading::after {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border-radius: 50%;
+    border-top: 2px solid $color-fg-inverted;
+    border-right: 2px solid transparent;
+    animation: spinner 0.6s linear infinite;
+  }
+}
 
-    &::before {
-      left: 7px;
-    }
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
   }
 }
 
 .card__image {
   @include paragraph-reset;
-
-  box-sizing: border-box;
+  order: -1;
+  position: relative;
+  top: -1px;
+  left: -1px;
+  box-sizing: content-box;
+  width: 100%;
   max-width: 280px;
   max-height: 260px;
   line-height: 0;
   background-color: $color-bg-alter;
   overflow: hidden;
+  border: 1px solid $color-picture-border;
 
   img {
     width: 100%;

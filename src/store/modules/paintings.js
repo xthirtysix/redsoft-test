@@ -8,6 +8,7 @@ export default {
         discount: 1e6,
         currency: '$',
         inStock: true,
+        loading: false,
         image: 'the-birth-of-venus',
       },
       {
@@ -17,6 +18,7 @@ export default {
         discount: undefined,
         currency: '$',
         inStock: true,
+        loading: false,
         image: 'the-last-supper',
       },
       {
@@ -26,6 +28,7 @@ export default {
         discount: 5e6,
         currency: '$',
         inStock: true,
+        loading: false,
         image: 'the-creation-of-adam',
       },
       {
@@ -35,9 +38,18 @@ export default {
         discount: undefined,
         currency: '$',
         inStock: false,
+        loading: false,
         image: 'the-anatomy-lesson',
       },
     ],
+  },
+  mutations: {
+    SET_LOADING(state, product) {
+      state.paintings.find(item => item.id === product.id).loading = true;
+    },
+    UNSET_LOADING(state, product) {
+      state.paintings.find(item => item.id === product.id).loading = false;
+    },
   },
   getters: {
     paintings(state) {

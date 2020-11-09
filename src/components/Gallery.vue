@@ -5,7 +5,7 @@
       li.gallery__item(v-for="(painting, idx) in paintings" :key="idx")
         card(
           :data="painting"
-          :isInCart="!!~cart.indexOf(painting.name)"
+          :isInCart="!!~cart.indexOf(painting.id)"
           @addToCart="addToCart"
           @removeFromCart="removeFromCart"
         )
@@ -47,11 +47,8 @@ export default {
 <style lang="scss">
 @import '~@/scss/main.scss';
 
-.page {
-}
-
 .page__header {
-  margin-bottom: 2.3rem;
+  margin-bottom: 2.4rem;
 }
 
 .gallery {
