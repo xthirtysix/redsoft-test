@@ -50,9 +50,15 @@ export default {
 }
 
 .main-nav__logo {
+  @include focus;
   display: block;
   margin-right: 2.5rem;
   line-height: 0;
+  transition: 0.2s ease-in-out opacity;
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .main-nav__link {
@@ -61,6 +67,6 @@ export default {
   display: block;
   line-height: 21px;
   margin-right: 2.05rem;
-  padding: 0.45rem 0.5rem 0.55rem;
+  padding: 0.5rem;
 }
 </style>

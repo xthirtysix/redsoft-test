@@ -1,5 +1,23 @@
 @import './variables.scss';
 
+@mixin with-before {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+  }
+}
+
+@mixin with-after {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+  }
+}
+
 @mixin list-reset {
   margin: 0;
   padding: 0;
@@ -11,28 +29,9 @@
   text-align: left;
 }
 
-@mixin with-before {
-  position: relative;
-
-  &::before {
-    content: "";
-    position: absolute;
-    transition: 0.3s ease-in;
-  }
-}
-
-@mixin with-after {
-  position: relative;
-
-  &::after {
-    content: "";
-    position: absolute;
-    transition: 0.3s ease-in;
-  }
-}
-
 @mixin link-reset {
   @include with-after;
+  @include focus;
 
   text-decoration: none;
   color: $color-fg;
@@ -47,14 +46,29 @@
   }
 }
 
+@mixin focus {
+  box-shadow: none;
+  outline: none;
+
+  &:focus {
+    box-shadow: 0 0 0 2px $color-bg, 0 0 0 4px $color-accent
+  }
+
+  &:active {
+    box-shadow: none;
+  }
+}
+
 @mixin button {
+  @include focus;
   font-family: inherit;
+  font-size: 14px;
+  line-height: 21px;
   color: $color-fg-inverted;
   background-color: $color-btn;
   border: none;
   transition: 0.3s ease-in background-color;
   cursor: pointer;
-  outline: none;
 
   &:hover {
     background-color: $color-hover;
@@ -62,5 +76,9 @@
 
   &:disabled {
     background-color: $color-disabled;
+  }
+
+  &:active {
+
   }
 }

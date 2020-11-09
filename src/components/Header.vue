@@ -26,7 +26,7 @@ export default {
   display: flex;
   width: 100%;
   margin-bottom: 45px;
-  padding: 1.5rem 0;
+  padding: 1.5rem 0 1.5rem;
   border-bottom: 1px solid $color-border;
 }
 
@@ -42,10 +42,12 @@ export default {
 
 .search__input {
   box-sizing: border-box;
-  min-width: 293px;
-  padding: 14px 8px 15px 16px;
+  min-width: 294px;
+  margin-right: 0;
+  padding: 14px 8px 15px 14px;
   font-family: inherit;
-  letter-spacing: 0.4px;
+  font-size: 14px;
+  letter-spacing: 0.1px;
   background-color: $color-bg;
   border: 1px solid $color-border;
   border-radius: 0;
@@ -54,13 +56,19 @@ export default {
   &::placeholder {
     color: $color-fg-placeholder;
   }
+
+  &:focus {
+    border-color: $color-border-active;
+  }
 }
 
 .search__btn {
   @include button;
 
-  padding: 13px 37px 14px;
+  margin-left: 0;
+  padding: 13px 36px 14px 35px;
   font-family: inherit;
+  font-size: 14px;
   letter-spacing: 0.4px;
   border: none;
   border-radius: 0;
